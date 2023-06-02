@@ -25,13 +25,29 @@ export default function Cards({ title, price }) {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead style={{ marginTop: "4rem" }}>
           <TableRow>
-            <TableCell align="left">{title}</TableCell>
-            <TableCell align="left">${price}</TableCell>
+            <TableCell align="left">Name</TableCell>
+            <TableCell align="left">$Price</TableCell>
             <TableCell align="right">Fat&nbsp;(g)</TableCell>
             <TableCell align="right">Carbs&nbsp;(g)</TableCell>
             <TableCell align="right">Protein&nbsp;(g)</TableCell>
           </TableRow>
         </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow
+              key={row.name}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{title}</TableCell>
+              <TableCell align="right">{price}</TableCell>
+              <TableCell align="right">{row.carbs}</TableCell>
+              <TableCell align="right">{row.protein}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
     </TableContainer>
   );

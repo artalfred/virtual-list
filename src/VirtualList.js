@@ -3,13 +3,22 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
 import Cards from "./Components/Cards";
+import { Skeleton } from "@mui/material";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 export default function VirtualList() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     api();
-  });
+  }, []);
 
   const api = () => {
     axios
@@ -22,22 +31,17 @@ export default function VirtualList() {
     const item = data[index];
 
     return (
-      <div
-        style={{
-          ...style,
-          display: "flex",
-          placeItems: "center",
-          padding: "1rem",
-        }}
+      <TableRow
+        key={item.id}
+        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+        style={style}
       >
-        <Cards
-          title={item.title}
-          price={item.price}
-          discountPercentage={item.discountPercentage}
-          rating={item.rating}
-          stock={item.stock}
-        />
-      </div>
+        {item.title ? (
+          <TableCell align="left">{item.title}</TableCell>
+        ) : (
+          <Skeleton />
+        )}
+      </TableRow>
     );
   };
 
@@ -46,19 +50,30 @@ export default function VirtualList() {
       style={{ display: "flex", justifyContent: "center", paddingTop: "4rem" }}
     >
       <div>
-        <List height={600} width={900} itemSize={70} itemCount={data.length}>
-          {renderData}
-        </List>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Product Name</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {renderData ? (
+                <List
+                  height={600}
+                  width={900}
+                  itemSize={70}
+                  itemCount={data.length}
+                >
+                  {renderData}
+                </List>
+              ) : (
+                <Skeleton />
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
-
-      {/* {data.map((item) => {
-        return (
-          <List height={700} width={700} itemSize={50} itemCount={data.length}>
-              <h1>{item.title}</h1>
-            </div>
-          </List>
-        );
-      })} */}
     </div>
   );
 }
